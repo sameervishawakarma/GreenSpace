@@ -79,32 +79,8 @@ namespace TodoApi.Controllers
         [HttpPost]
         public async Task<ActionResult<RolePriviligae>> PostRolePriviligae(RolePriviligae rolePriviligae)
         {
-            var rolep = await _context.RolePriviligae.SingleOrDefaultAsync(result=>result.UserRole==rolePriviligae.UserRole && result.PageId == rolePriviligae.PageId);
-            if (rolep == null)
-            {
-                _context.RolePriviligae.Add(rolePriviligae);
-            }
-            else
-            {
-                var rolepri = new RolePriviligae()
-                {
-                    Id = rolep.Id,
-                    View = rolePriviligae.View,
-                    List = rolePriviligae.List,
-                    Add=rolePriviligae.Add,
-                    Edit=rolePriviligae.Edit,
-                    Delete=rolePriviligae.Delete
-                };
-                //_context.Entry(rolePriviligae).State = EntityState.Modified;
-                _context.Entry(rolepri).Property(x => x.View).IsModified = true;
-                _context.Entry(rolepri).Property(x => x.List).IsModified = true;
-                _context.Entry(rolepri).Property(x => x.Add).IsModified = true;
-                _context.Entry(rolepri).Property(x => x.Edit).IsModified = true;
-                _context.Entry(rolepri).Property(x => x.Delete).IsModified = true;
-            }
-            
+            _context.RolePriviligae.Add(rolePriviligae);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetRolePriviligae", new { id = rolePriviligae.Id }, rolePriviligae);
         }
 

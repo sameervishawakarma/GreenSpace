@@ -22,9 +22,29 @@ namespace TodoApi.Controllers
 
         // GET: api/Rights
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RightMaster>>> GetRightMaster(string module)
+        public async Task<ActionResult<IEnumerable<RightMaster>>> GetRightMasterAsync(string module, UserRoles userrole)
         {
-            return await _context.RightMaster.Include(right=>right.DFields).Where(right=>right.Module==module).ToListAsync();
+            List<RightMaster> RMList = new List<RightMaster>();
+            
+            var rights = await _context.RightMaster.Where(right => right.Module == module)
+                .Include(right => right.PermissionFields)
+                .ToListAsync();
+            foreach (var rm in rights)
+            {
+                RightMaster RM = new RightMaster();
+                RM = rm;
+                List<RolePriviligae> PerList = new List<RolePriviligae>();
+                foreach (var per in rm.PermissionFields)
+                {
+                    if (per.UserRole == userrole)
+                    {
+                        PerList.Add(per);
+                    }
+                }
+                RM.PermissionFields = PerList;
+                RMList.Add(RM);
+            }
+            return RMList;
         }
 
         // GET: api/Rights/GetCategoryList
@@ -107,7 +127,7 @@ namespace TodoApi.Controllers
             {
                 var rolepri = new RolePriviligae()
                 {
-                    PageId = rightMaster.Id,
+                    RightMasterId = rightMaster.Id,
                     UserRole = (UserRoles)i,
                     View = true,
                     List = true,

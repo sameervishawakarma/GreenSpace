@@ -9,7 +9,8 @@ namespace TodoApi.Models
     {
         public int Id { get; set; }
         public UserRoles UserRole { get; set; }
-        public int PageId { get; set; }
+        public int RightMasterId { get; set; }
+        public RightMaster RightMaster { get; set; }
         public Boolean View { get; set; }
         public Boolean List { get; set; }
         public Boolean Add { get; set; }

@@ -15,5 +15,7 @@ namespace TodoApi.Models
         public Boolean IsActive { get; set; }
         [JsonProperty("DFields")]
         public ICollection<RightDetail> DFields { get; set; }
+        [JsonProperty("PermissionFields")]
+        public ICollection<RolePriviligae> PermissionFields { get; set; }
     }
 }
